@@ -46,6 +46,7 @@ class UserList extends Component {
               <p>Email: {user.email}</p>
               <p>Department: {user.department}</p>
               <button onClick={() => this.onDeleteUser(user.id)}>Delete</button>
+              <button onClick={() => this.onEditUser(user.id)}>Edit</button>
               <hr />
             </li>
           ))}
@@ -54,14 +55,25 @@ class UserList extends Component {
     );
   };
 
-  onDeleteUser = (id) => {
+  onDeleteUser = async (id) => {
     const { userList } = this.state;
-    const filteredData = userList.filter((user) => {
-      return user.id !== id;
-    });
+    const response = await fetch(
+      `https://jsonplaceholder.typicode.com/users/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
+    console.log(response);
+    if (response.ok) {
+      const filteredData = userList.filter((user) => {
+        return user.id !== id;
+      });
 
-    this.setState({ userList: filteredData });
+      this.setState({ userList: filteredData });
+    }
   };
+
+  onEditUser = () => {};
 
   renderFailureView = () => (
     <div>
