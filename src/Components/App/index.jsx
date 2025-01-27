@@ -73,11 +73,13 @@ class App extends Component {
           return each;
         }),
       }));
+    } else {
+      this.setState((prev) => ({ userData: [...prev.userData, newUserData] }));
     }
   };
   render() {
     const { userData, activeUser } = this.state;
-    console.log(userData);
+
     return (
       <ContextApi.Provider
         value={{
