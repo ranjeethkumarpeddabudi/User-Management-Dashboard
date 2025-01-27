@@ -60,3 +60,9 @@ section {
   display: flex;
   flex-direction: column;
 }
+.left-button {
+  background-color: black;
+}
+.right-button {
+  background-color: black;
+}

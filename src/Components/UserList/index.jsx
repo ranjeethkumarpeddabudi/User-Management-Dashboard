@@ -58,9 +58,13 @@ const UserList = () => {
                   </li>
                 ))}
               </ul>
-              <button type="button">left</button>
+              <button type="button" className="left-button">
+                left
+              </button>
               <p>{current}</p>
-              <button type="button">Right</button>
+              <button type="button" className="right-button">
+                Right
+              </button>
             </section>
           </>
         );
