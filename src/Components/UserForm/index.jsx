@@ -3,6 +3,8 @@ import ContextApi from "../ContextApi";
 import Header from "../Header";
 import toast from "react-hot-toast";
 import "./index.css";
+
+//Displays User Form for updating the User Data
 const UserForm = () => {
   const { activeUser, onUpdateUser, userData } = useContext(ContextApi);
   const { id, firstName, lastName, email, department } = activeUser;
@@ -15,9 +17,8 @@ const UserForm = () => {
     department: department || "",
   });
 
+  //Validates User form Data
   const validateForm = () => {
-    console.log(newUser);
-    console.log(newUser.id);
     if (!String(newUser.id).trim()) return toast.error("Id is required");
     if (!newUser.firstName.trim()) return toast.error("First name is required");
     if (!newUser.lastName.trim()) return toast.error("Last name is required");
@@ -37,6 +38,7 @@ const UserForm = () => {
     const success = validateForm();
     if (success === true) {
       try {
+        toast.loading("Working on...");
         const isUserExists = userData.find((user) => user.id === id);
 
         const response = await fetch(
@@ -56,6 +58,7 @@ const UserForm = () => {
           const fetchedData = await response.json();
 
           onUpdateUser(fetchedData);
+          toast.dismiss();
           toast.success("updated");
           setNewUser({
             id: "",

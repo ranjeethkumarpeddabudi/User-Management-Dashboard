@@ -45,21 +45,19 @@ The `src` (source) directory contains all the application source code.
 
    - It holds the global state for the entire app.
 
-4. **`components/ErrorBoundary`**:
+4. **`components/Header`**:
 
-   - catches errors around the app and display user-friendly messages.
+   - Contains `Add User` button.
 
-5. **`components/Header`**:
+5. **`components/UserForm`**:
 
-   - Contains `Add User` button
+   - Contains user form to add and update the user data.
 
-6. **`components/UserForm`**:
+6. **`components/UserList`**:
 
-   - Contains user form to add and update the user data
+   - It renders the users-List that are present in the global state.
 
-7. **`components/UserList`**:
-
-   - It renders the users-List that are present in the global state
+- All the components under **`Components/*`** consists of **`index.css`** individually that is used to style the respective components.
 
 ---
 
@@ -69,6 +67,11 @@ The `public` directory contains image **`User_icon.png`**
 
 ## Challenges faced
 
--
+- Handling and displaying errors is one thing i have faced during the entire app development with repect to API calls.For this i have used third party package to display status messages accordingly.
+
+- Managing the state is bit complex as i wanted to make the state global for future enhancement of the application.Thanks to ContextApi which helped me to build the application faster.
 
 ## Further Improvements
+
+- As all the users data is displayed at once instead of this we can fetch the data in chunks using the query parameters like offset and limit to the API end point.
+- we can implement authentication logic i.e., Login and signup functionality to the app so that only authorized user can see and edit all the users data.

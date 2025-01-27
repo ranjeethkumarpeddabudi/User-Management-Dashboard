@@ -1,13 +1,15 @@
 import { Component } from "react";
 import { Route, Routes } from "react-router-dom";
-import { ThreeDots } from "react-loader-spinner";
-import { Toaster } from "react-hot-toast";
+import { ThreeDots, Vortex } from "react-loader-spinner";
+import toast, { Toaster } from "react-hot-toast";
 
 import UserForm from "../UserForm";
 import UserList from "../UserList";
 import ContextApi from "../ContextApi";
 import Header from "../Header";
 import "./index.css";
+
+//Fetches user list and updates into state variable
 class App extends Component {
   state = {
     userData: [],
@@ -34,7 +36,7 @@ class App extends Component {
       this.setState({ userData: updatedData, isLoading: false });
     } else {
       this.setState({
-        errorText: "Something went wrong...!!!",
+        errorText: "Oops..Something went wrong...!!!",
         isLoading: false,
       });
     }
@@ -42,6 +44,7 @@ class App extends Component {
 
   onDeleteUser = async (id) => {
     const { userData } = this.state;
+    toast.loading("Working on...");
     const response = await fetch(
       `https://jsonplaceholder.typicode.com/users/${id}`,
       {
@@ -55,6 +58,10 @@ class App extends Component {
       });
 
       this.setState({ userData: filteredData });
+      toast.dismiss();
+      toast.success("User deleted");
+    } else {
+      toast.error("Oops..Something went wrong...!!!");
     }
   };
 
@@ -90,8 +97,9 @@ class App extends Component {
     }
     if (errorText !== "") {
       return (
-        <div>
-          <h1>{errorText}</h1>
+        <div className="error-container">
+          <Vortex height="80" width="80" color="blue" />
+          <h3>{errorText}</h3>
         </div>
       );
     }

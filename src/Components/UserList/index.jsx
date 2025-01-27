@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
 import ContextApi from "../ContextApi";
 import Header from "../Header";
-import { useState } from "react";
+import { MdDeleteForever } from "react-icons/md";
+import { BiEdit } from "react-icons/bi";
+
 import "./index.css";
 
 //Get the User List and Display in the User interface
 
 const UserList = () => {
-  const [current, setCurrent] = useState(1);
   return (
     <ContextApi.Consumer>
       {(value) => {
@@ -44,6 +45,7 @@ const UserList = () => {
                         className="delete-button"
                         onClick={() => onClickDelete(user.id)}
                       >
+                        <MdDeleteForever />
                         Delete
                       </button>
                       <Link to="/user-form">
@@ -51,6 +53,7 @@ const UserList = () => {
                           className="edit-button"
                           onClick={() => onClickEdit(user)}
                         >
+                          <BiEdit />
                           Edit
                         </button>
                       </Link>
@@ -58,13 +61,6 @@ const UserList = () => {
                   </li>
                 ))}
               </ul>
-              <button type="button" className="left-button">
-                left
-              </button>
-              <p>{current}</p>
-              <button type="button" className="right-button">
-                Right
-              </button>
             </section>
           </>
         );

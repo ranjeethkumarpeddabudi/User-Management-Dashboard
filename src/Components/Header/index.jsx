@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { IoMdPersonAdd } from "react-icons/io";
+
 import "./index.css";
 const Header = () => {
   return (
@@ -9,9 +11,10 @@ const Header = () => {
         </Link>
         <h1>User Management Dashboard</h1>
 
-        <Link to="/user-form">
+        <Link to="/user-form" className="link">
           <button type="button" className="add-button">
-            Add User
+            <IoMdPersonAdd />
+            Add
           </button>
         </Link>
       </header>

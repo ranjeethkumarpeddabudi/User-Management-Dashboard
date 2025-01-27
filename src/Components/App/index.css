@@ -8,3 +8,9 @@
   height: 80vh;
   align-items: center;
 }
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}

@@ -23,8 +23,15 @@
   cursor: pointer;
   font-weight: 600;
   font-size: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  padding: 3px 5px;
+  align-items: center;
 }
-
+.link {
+  text-decoration: none;
+}
 @media screen and (max-width: 576px) {
   .header-container {
     font-size: 10px;
