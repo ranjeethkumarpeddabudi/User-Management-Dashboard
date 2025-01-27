@@ -39,12 +39,12 @@ const UserForm = () => {
     if (success === true) {
       try {
         toast.loading("Working on...");
-        const isUserExists = userData.find((user) => user.id === id);
+        const isUserExists = userData.find((user) => user.id === newUser.id);
 
         const response = await fetch(
           isUserExists
-            ? `https://jsonplaceholder.typicode.com/users/${id}`
-            : "https://jsonplaceholder.typicode.com/users",
+            ? `https://jsonplaceholder.typicode.com/users/1`
+            : `https://jsonplaceholder.typicode.com/users/`,
           {
             method: isUserExists ? "PUT" : "POST",
             body: JSON.stringify(newUser),
@@ -55,11 +55,11 @@ const UserForm = () => {
         );
 
         if (response.ok) {
-          const fetchedData = await response.json();
-
-          onUpdateUser(fetchedData);
           toast.dismiss();
+          onUpdateUser(newUser);
+
           toast.success("updated");
+
           setNewUser({
             id: "",
             firstName: "",
@@ -67,9 +67,11 @@ const UserForm = () => {
             email: "",
             department: "",
           });
+        } else {
+          toast.error("something went wrong");
         }
       } catch (error) {
-        console.log(error);
+        toast.error(error);
       }
     }
   };
