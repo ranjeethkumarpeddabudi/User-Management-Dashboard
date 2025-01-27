@@ -1,28 +1,25 @@
 import { Component } from "react";
 import { Route, Routes } from "react-router-dom";
+import { ThreeDots } from "react-loader-spinner";
+import { Toaster } from "react-hot-toast";
+
 import UserForm from "../UserForm";
 import UserList from "../UserList";
 import ContextApi from "../ContextApi";
-
-const apiConstants = {
-  initial: "INITIAL",
-  success: "SUCCESS",
-  failure: "FAILURE",
-  inProgress: "IN_PROGRESS",
-};
+import Header from "../Header";
 
 class App extends Component {
   state = {
-    apiState: apiConstants.initial,
     userData: [],
     activeUser: {},
+    isLoading: false,
   };
   componentDidMount() {
     this.getUserList();
   }
 
   getUserList = async () => {
-    this.setState({ apiState: apiConstants.inProgress });
+    this.setState({ isLoading: true });
     const res = await fetch("https://jsonplaceholder.typicode.com/users");
     if (res.ok) {
       const fetchedData = await res.json();
@@ -33,9 +30,7 @@ class App extends Component {
         email: user.email,
         department: "IT",
       }));
-      this.setState({ userData: updatedData, apiState: apiConstants.success });
-    } else {
-      this.setState({ apiState: apiConstants.failure });
+      this.setState({ userData: updatedData, isLoading: false });
     }
   };
 
@@ -57,9 +52,6 @@ class App extends Component {
     }
   };
 
-  onEditUser = (User) => {
-    this.setState({ activeUser: User });
-  };
   onUpdateUser = (newUserData) => {
     const { userData } = this.state;
     const isUserExists = userData.find((user) => user.id === newUserData.id);
@@ -72,29 +64,42 @@ class App extends Component {
           }
           return each;
         }),
+        activeUser: newUserData,
       }));
     } else {
       this.setState((prev) => ({ userData: [...prev.userData, newUserData] }));
     }
   };
   render() {
-    const { userData, activeUser } = this.state;
+    const { userData, activeUser, isLoading } = this.state;
+    if (isLoading) {
+      return (
+        <>
+          <Header />
+          <div>
+            <ThreeDots height="80" width="80" color="blue" />
+          </div>
+        </>
+      );
+    }
 
     return (
-      <ContextApi.Provider
-        value={{
-          userData,
-          onDeleteUser: this.onDeleteUser,
-          onEditUser: this.onEditUser,
-          activeUser,
-          onUpdateUser: this.onUpdateUser,
-        }}
-      >
-        <Routes>
-          <Route index path="/" Component={UserList} />
-          <Route path="/user-form" Component={UserForm} />
-        </Routes>
-      </ContextApi.Provider>
+      <>
+        <ContextApi.Provider
+          value={{
+            userData,
+            onDeleteUser: this.onDeleteUser,
+            activeUser,
+            onUpdateUser: this.onUpdateUser,
+          }}
+        >
+          <Routes>
+            <Route index path="/" Component={UserList} />
+            <Route path="/user-form" Component={UserForm} />
+          </Routes>
+        </ContextApi.Provider>
+        <Toaster />
+      </>
     );
   }
 }

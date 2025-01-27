@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import ContextApi from "../ContextApi";
 import Header from "../Header";
+import toast from "react-hot-toast";
 
 const UserForm = () => {
   const { activeUser, onUpdateUser, userData } = useContext(ContextApi);
@@ -14,43 +15,46 @@ const UserForm = () => {
     department: department || "",
   });
 
+  const validateForm = () => {
+    if (!newUser.id.trim()) return toast.error("Id is required");
+    if (!newUser.firstName.trim()) return toast.error("First name is required");
+    if (!newUser.lastName.trim()) return toast.error("Last name is required");
+    if (!newUser.email.trim()) return toast.error("Email is required");
+    if (!/\S+@\S+\.\S+/.test(newUser.email))
+      return toast.error("Invalid email is required");
+
+    if (!newUser.department.trim())
+      return toast.error("Department is required");
+
+    return true;
+  };
+
   const onSubmitForm = async (e) => {
     e.preventDefault();
-    try {
-      const isUserExists = userData.find((user) => user.id === id);
-      if (!isUserExists) {
-        const res = await fetch("https://jsonplaceholder.typicode.com/users", {
-          method: "POST",
-          body: JSON.stringify(newUser),
-          headers: {
-            "Content-type": "application/json",
-          },
-        });
-        console.log(res);
-        if (res.ok) {
-          onUpdateUser(newUser);
-          setNewUser({
-            id: "",
-            firstName: "",
-            lastName: "",
-            email: "",
-            department: "",
-          });
-        }
-      } else {
-        const res = await fetch(
-          `https://jsonplaceholder.typicode.com/users/${id}`,
+
+    const success = validateForm();
+    if (success === true) {
+      try {
+        const isUserExists = userData.find((user) => user.id === id);
+
+        const response = await fetch(
+          isUserExists
+            ? `https://jsonplaceholder.typicode.com/users/${id}`
+            : "https://jsonplaceholder.typicode.com/users",
           {
-            method: "PUT",
+            method: isUserExists ? "PUT" : "POST",
             body: JSON.stringify(newUser),
             headers: {
               "Content-type": "application/json",
             },
           }
         );
-        console.log(res);
-        if (res.ok) {
-          onUpdateUser(newUser);
+
+        if (response.ok) {
+          const fetchedData = await response.json();
+
+          onUpdateUser(fetchedData);
+          toast.success("updated");
           setNewUser({
             id: "",
             firstName: "",
@@ -59,9 +63,9 @@ const UserForm = () => {
             department: "",
           });
         }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
   };
   const handleInput = (e) => {
@@ -82,35 +86,30 @@ const UserForm = () => {
           name="id"
           onChange={handleInput}
           value={newUser.id}
-          required
         />
         <input
           placeholder="Enter Your First Name"
           name="firstName"
           onChange={handleInput}
           value={newUser.firstName}
-          required
         />
         <input
           placeholder="Enter Your Last Name"
           name="lastName"
           onChange={handleInput}
           value={newUser.lastName}
-          required
         />
         <input
           placeholder="@email.com"
           name="email"
           onChange={handleInput}
           value={newUser.email}
-          required
         />
         <input
           placeholder="Enter Your Department"
           name="department"
           onChange={handleInput}
           value={newUser.department}
-          required
         />
         <button type="submit">Submit</button>
       </form>

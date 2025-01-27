@@ -6,14 +6,15 @@ const UserList = () => {
   return (
     <ContextApi.Consumer>
       {(value) => {
-        const { userData, onDeleteUser, onEditUser } = value;
+        const { userData, onDeleteUser, onUpdateUser } = value;
         const onClickDelete = (id) => {
           onDeleteUser(id);
         };
 
         const onClickEdit = (user) => {
-          onEditUser(user);
+          onUpdateUser(user);
         };
+
         return (
           <>
             <Header />
