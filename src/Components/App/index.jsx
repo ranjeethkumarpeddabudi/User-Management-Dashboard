@@ -7,12 +7,13 @@ import UserForm from "../UserForm";
 import UserList from "../UserList";
 import ContextApi from "../ContextApi";
 import Header from "../Header";
-
+import "./index.css";
 class App extends Component {
   state = {
     userData: [],
     activeUser: {},
     isLoading: false,
+    errorText: "",
   };
   componentDidMount() {
     this.getUserList();
@@ -31,6 +32,11 @@ class App extends Component {
         department: "IT",
       }));
       this.setState({ userData: updatedData, isLoading: false });
+    } else {
+      this.setState({
+        errorText: "Something went wrong...!!!",
+        isLoading: false,
+      });
     }
   };
 
@@ -71,15 +77,22 @@ class App extends Component {
     }
   };
   render() {
-    const { userData, activeUser, isLoading } = this.state;
+    const { userData, activeUser, isLoading, errorText } = this.state;
     if (isLoading) {
       return (
-        <>
+        <div>
           <Header />
-          <div>
+          <div className="loader-container">
             <ThreeDots height="80" width="80" color="blue" />
           </div>
-        </>
+        </div>
+      );
+    }
+    if (errorText !== "") {
+      return (
+        <div>
+          <h1>{errorText}</h1>
+        </div>
       );
     }
 

@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import ContextApi from "../ContextApi";
 import Header from "../Header";
+import { useState } from "react";
 
 const UserList = () => {
+  const [current, setCurrent] = useState(1);
   return (
     <ContextApi.Consumer>
       {(value) => {
@@ -33,6 +35,9 @@ const UserList = () => {
                 </li>
               ))}
             </ul>
+            <button>left</button>
+            <p>{current}</p>
+            <button>Right</button>
           </>
         );
       }}
